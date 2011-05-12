@@ -4,8 +4,9 @@ var Prompt=require('prompt'),
     sys=require('sys');
 
 // following variables could easily substituted by args
-var timeout=6,
-    confirmText = 'I DO!';
+var timeout=10,
+    confirmText = 'I DO!',
+		quiet=true;
 
 var exitTimer, warningTimer; 
 function timeBomb(sec){
@@ -17,13 +18,15 @@ function timeBomb(sec){
     process.exit(1);
   },(sec+1)*1000);
 
-  // print priodically a timeout log of the time passing by
-  // var timeGone = 0,
-  //     warningLoop = 2;
-  // process.stdout.write("0s");
-  // warningTimer = setInterval(function(){
-  //   process.stdout.write(".." + (timeGone += warningLoop) + "s");
-  // },warningLoop*1000);
+  //print priodically a timeout log of the time passing by
+  if(!quiet){
+		var timeGone = 0,
+      	warningLoop = 1;
+  	warningTimer = setInterval(function(){
+  		timeGone += warningLoop;
+  		process.stdout.write((((timeGone % 5)== 0)? timeGone + "s": "."));
+  	},warningLoop*1000);
+	};
 }
 
 function stopTimeBomb(userInput,confirmText){
@@ -48,4 +51,8 @@ function ConfirmIt() {
     .ask('','user')
     .tap(function(input){stopTimeBomb(input.user.trim(),confirmText)})
     .end();
+}
+
+if (module.parent == null){
+	ConfirmIt()
 }
