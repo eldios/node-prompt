@@ -76,6 +76,7 @@ function Prompt(question, cb) {
                 }
             });
         } else {
+            p.setEncoding("utf8")
             p.on('data', function(line) {
                 p.removeAllListeners('data');
                 cb(line);
